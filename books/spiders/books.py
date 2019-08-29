@@ -1,3 +1,5 @@
+import scrapy
+
 class WikiSpider(scrapy.Spider):
     name = "wiki_spider"
     start_urls = ['https://wiki.guildwars2.com/wiki/War_Room_Restoration_1']
