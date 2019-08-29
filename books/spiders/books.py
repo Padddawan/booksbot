@@ -1,30 +1,14 @@
-# -*- coding: utf-8 -*-
-import scrapy
-
-
-class BooksSpider(scrapy.Spider):
-    name = "books"
-    allowed_domains = ["books.toscrape.com"]
-    start_urls = [
-        'http://books.toscrape.com/',
-    ]
+class WikiSpider(scrapy.Spider):
+    name = "wiki_spider"
+    start_urls = ['https://wiki.guildwars2.com/wiki/War_Room_Restoration_1']
 
     def parse(self, response):
-        for book_url in response.css("article.product_pod > h3 > a ::attr(href)").extract():
-            yield scrapy.Request(response.urljoin(book_url), callback=self.parse_book_page)
-        next_page = response.css("li.next > a ::attr(href)").extract_first()
-        if next_page:
-            yield scrapy.Request(response.urljoin(next_page), callback=self.parse)
+        SET_SELECTOR = '.mediawiki'
+        for wikiset in response.css(SET_SELECTOR):
 
-    def parse_book_page(self, response):
-        item = {}
-        product = response.css("div.product_main")
-        item["title"] = product.css("h1 ::text").extract_first()
-        item['category'] = response.xpath(
-            "//ul[@class='breadcrumb']/li[@class='active']/preceding-sibling::li[1]/a/text()"
-        ).extract_first()
-        item['description'] = response.xpath(
-            "//div[@id='product_description']/following-sibling::p/text()"
-        ).extract_first()
-        item['price'] = response.css('p.price_color ::text').extract_first()
-        yield item
+            #IMAGE_SELECTOR = 'img ::attr(src)'
+            BUILDING_SELECTOR = './/dl[dt/text() = " Building"]/dd/a/text()'
+            yield {
+                'building': wikiset.xpath(BUILDING_SELECTOR).extract_first(),
+                #'image': brickset.css(IMAGE_SELECTOR).extract_first(),
+            }
