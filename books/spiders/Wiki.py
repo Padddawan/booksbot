@@ -8,10 +8,10 @@ class WikiSpider(scrapy.Spider):
         SET_SELECTOR = '.mediawiki'
         for wikiset in response.css(SET_SELECTOR):
 
-            IMAGE_SELECTOR = 'img ::attr(src)'
+            IMAGE_SELECTOR = '.image::text'
             BUILDING_SELECTOR = './/dl[dt/text() = " Building"]/dd/a/text()'
             yield {
                 'building': wikiset.xpath(BUILDING_SELECTOR).extract_first(),
-                'image': brickset.css(IMAGE_SELECTOR).extract_first(),
+                'image': wikiset.css(IMAGE_SELECTOR).extract(),
 }
             
