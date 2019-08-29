@@ -13,5 +13,6 @@ class WikiSpider(scrapy.Spider):
             yield {
                 'building': wikiset.xpath(BUILDING_SELECTOR).extract_first(),
                 'image': wikiset.css(IMAGE_SELECTOR).extract(),
+                'warimage':wikiset.xpath("//th/a[@href='/wiki/File:War_Room_Proprietor_(map_icon).png']/img/src.extract(),
 }
             
